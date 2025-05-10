@@ -12,6 +12,7 @@ namespace InventarioMed.Shared.Data.BD
     public class InventarioMedContext : DbContext
     {
         public DbSet<Equipment> Equipment { get; set; }
+        public DbSet<Category> Category { get; set; }
 
         private string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=InventarioMed_BD;Integrated Security=True;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

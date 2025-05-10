@@ -16,6 +16,8 @@ namespace InventarioMed_Console
         public string Name { get; set; }
         public string Manufacturer { get; set; }
 
+        public int Id { get; set; }
+
         private List<Category> Categories = new();
 
         public override string ToString()

@@ -1,43 +1,18 @@
 ﻿using InventarioMed_Console;
 using InventarioMed.Shared.Data.BD;
+using System.Xml;
 
 internal class Program
-{   
+{
     public static Dictionary<string, Equipment> EquipmentList = new();
     private static void Main(string[] args)
     {
-        var EqpDAL = new EquipmentDAL();
-
-        //EqpDAL.Create(new Equipment("Fototerapia","Philips"));
+        var EquipmentDAL = new DAL<Equipment>();
         
-        var EqpList = EqpDAL.Read();
-        foreach (var item in EqpList)
-        {
-            Console.WriteLine(item);
-        }
-
-        EqpDAL.Update(new Equipment("Fototerapia", "Unimed"),2);
-
-        EqpList = EqpDAL.Read();
-        foreach (var item in EqpList)
-        {
-            Console.WriteLine(item);
-        }
-
-        EqpDAL.Delete(2);
-
-        EqpList = EqpDAL.Read();
-        foreach (var item in EqpList)
-        {
-            Console.WriteLine(item);
-        }
-
-
-        return;
-
         bool exit = false;
         while (!exit)
         {
+            Console.Clear();
             Console.WriteLine("Você chegou na InventarioMed!\n");
             Console.WriteLine("Digite 1 para registrar um equipamento");
             Console.WriteLine("Digite 2 para registrar a categoria de um equipamento");
@@ -54,13 +29,13 @@ internal class Program
                     EquipmentRegistration();
                     break;
                 case 2:
-                    CategoryRegistration();
+                    //CategoryRegistration();
                     break;
                 case 3:
                     EquipmentGet();
                     break;
                 case 4:
-                    CategoryGet();
+                    //CategoryGet();
                     break;
                 case -1:
                     Console.WriteLine("Até mais");
@@ -71,65 +46,64 @@ internal class Program
                     break;
             }
         }
-    }
-
-    private static void CategoryGet()
-    {
-        Console.Clear();
-        Console.WriteLine("Exibir detalhes do equipamento");
-        Console.WriteLine("Digite o equipamento cujas categorias deseja consultar");
-        string equipmentName = Console.ReadLine();
-        if (EquipmentList.ContainsKey(equipmentName))
+        void EquipmentRegistration()
         {
-            Equipment e = EquipmentList[equipmentName];
-            e.ShowCategories();
-        }
-        else
-        {
-            Console.WriteLine($"O equipamento {equipmentName} não existe");
-        }
-    }
-
-    private static void EquipmentGet()
-    {
-        Console.Clear();
-        Console.WriteLine("Lista de equipamentos:");
-        foreach (var item in EquipmentList.Values)
-        {
-            Console.WriteLine(item);
-        }
-    }
-
-    private static void CategoryRegistration()
-    {
-        Console.Clear();
-        Console.WriteLine("Registro de categorias");
-        Console.WriteLine("Digite o nome do equipamento cuja categoria você deseja registrar");
-        string equipmentName = Console.ReadLine();
-        if (EquipmentList.ContainsKey(equipmentName))
-        {
-            Console.WriteLine($"Informe o nome da categoria do {equipmentName}");
+            Console.Clear();
+            Console.WriteLine("Registro de equipamento");
+            Console.WriteLine("Digite o nome do equipamento que você deseja cadastrar");
             string name = Console.ReadLine();
-            Equipment e = EquipmentList[equipmentName];
-            e.AddCategory(new Category(name));
-            Console.WriteLine($"A categoria {name} do {equipmentName} foi registrada com sucesso");
+            Console.WriteLine("Digite o fabricante do equipamento que você deseja cadastrar");
+            string manufacturer = Console.ReadLine();
+            Equipment e = new(name, manufacturer);
+            EquipmentDAL.Create(e);
+            Console.WriteLine($"Equipamento {name} adcionado com sucesso!");
+            Console.ReadKey();
         }
-        else
+        void EquipmentGet()
         {
-            Console.WriteLine($"O equipamento {equipmentName} não existe");
+            Console.Clear();
+            Console.WriteLine("Lista de equipamentos:");
+            foreach (var item in EquipmentDAL.Read())
+            {
+                Console.WriteLine(item);
+            }
+            Console.ReadKey();
         }
+        //void CategoryGet()
+        //{
+        //    Console.Clear();
+        //    Console.WriteLine("Exibir detalhes do equipamento");
+        //    Console.WriteLine("Digite o equipamento cujas categorias deseja consultar");
+        //    string equipmentName = Console.ReadLine();
+        //    if (EquipmentList.ContainsKey(equipmentName))
+        //    {
+        //        Equipment e = EquipmentList[equipmentName];
+        //        e.ShowCategories();
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine($"O equipamento {equipmentName} não existe");
+        //    }
+        //}
+        //void CategoryRegistration()
+        //{
+        //    Console.Clear();
+        //    Console.WriteLine("Registro de categorias");
+        //    Console.WriteLine("Digite o nome do equipamento cuja categoria você deseja registrar");
+        //    string equipmentName = Console.ReadLine();
+        //    if (EquipmentList.ContainsKey(equipmentName))
+        //    {
+        //        Console.WriteLine($"Informe o nome da categoria do {equipmentName}");
+        //        string name = Console.ReadLine();
+        //        Equipment e = EquipmentList[equipmentName];
+        //        e.AddCategory(new Category(name));
+        //        Console.WriteLine($"A categoria {name} do {equipmentName} foi registrada com sucesso");
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine($"O equipamento {equipmentName} não existe");
+        //    }
+        //}
     }
 
-    private static void EquipmentRegistration()
-    {
-        Console.Clear();
-        Console.WriteLine("Registro de equipamento");
-        Console.WriteLine("Digite o nome do equipamento que você deseja cadastrar");
-        string name = Console.ReadLine();
-        Console.WriteLine("Digite o fabricante do equipamento que você deseja cadastrar");
-        string manufacturer = Console.ReadLine();
-        Equipment e = new(name, manufacturer);
-        EquipmentList.Add(name, e);
-        Console.WriteLine($"Equipamento {name} adcionado com sucesso!");
-    }
 }

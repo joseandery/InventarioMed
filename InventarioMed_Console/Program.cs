@@ -3,28 +3,12 @@ using InventarioMed.Shared.Data.BD;
 using System.Xml;
 
 internal class Program
-{   
+{
     public static Dictionary<string, Equipment> EquipmentList = new();
     private static void Main(string[] args)
     {
-        var EqpDAL = new EquipmentDAL();
-
-        //EqpDAL.Create(new Equipment("Fototerapia","Philips"));
-
-        //EqpDAL.Update(new Equipment("Radiometro", "Philips") { Id = 1004 });
-        //EqpDAL.Delete(new Equipment("Fototerapia", "Philips") { Id = 1005 });
-        var foundEqp = EqpDAL.ReadByName("Oxímetro");
-        if (foundEqp!=null ) Console.WriteLine("Equipamento encontrado: "+ foundEqp);
-        else Console.WriteLine("Equipamento não encontrado");
-
-
-        var EqpList = EqpDAL.Read();
-        foreach (var item in EqpList)
-        {
-            Console.WriteLine(item);
-        }
-
-
+        var EquipmentDAL = new DAL<Equipment>();
+        
         bool exit = false;
         while (!exit)
         {
@@ -71,7 +55,7 @@ internal class Program
             Console.WriteLine("Digite o fabricante do equipamento que você deseja cadastrar");
             string manufacturer = Console.ReadLine();
             Equipment e = new(name, manufacturer);
-            EqpDAL.Create(e);
+            EquipmentDAL.Create(e);
             Console.WriteLine($"Equipamento {name} adcionado com sucesso!");
             Console.ReadKey();
         }
@@ -79,7 +63,7 @@ internal class Program
         {
             Console.Clear();
             Console.WriteLine("Lista de equipamentos:");
-            foreach (var item in EqpDAL.Read())
+            foreach (var item in EquipmentDAL.Read())
             {
                 Console.WriteLine(item);
             }
@@ -121,5 +105,5 @@ internal class Program
         //    }
         //}
     }
-    
+
 }

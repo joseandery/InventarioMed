@@ -1,11 +1,39 @@
 ﻿using InventarioMed_Console;
+using InventarioMed.Shared.Data.BD;
 
 internal class Program
 {   
     public static Dictionary<string, Equipment> EquipmentList = new();
     private static void Main(string[] args)
     {
+        var EqpDAL = new EquipmentDAL();
+
+        //EqpDAL.Create(new Equipment("Fototerapia","Philips"));
         
+        var EqpList = EqpDAL.Read();
+        foreach (var item in EqpList)
+        {
+            Console.WriteLine(item);
+        }
+
+        EqpDAL.Update(new Equipment("Fototerapia", "Unimed"),2);
+
+        EqpList = EqpDAL.Read();
+        foreach (var item in EqpList)
+        {
+            Console.WriteLine(item);
+        }
+
+        EqpDAL.Delete(2);
+
+        EqpList = EqpDAL.Read();
+        foreach (var item in EqpList)
+        {
+            Console.WriteLine(item);
+        }
+
+
+        return;
 
         bool exit = false;
         while (!exit)

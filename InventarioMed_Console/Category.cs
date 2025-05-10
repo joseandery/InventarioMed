@@ -10,7 +10,7 @@ namespace InventarioMed_Console
     {
         public string Name { get; set; }
         public string Description { get; set; }
-
+        public int Id { get; set; }
         public Category(string name)
         {
             Name = name;

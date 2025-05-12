@@ -9,8 +9,8 @@ namespace InventarioMed_Console
     public class Category
     {
         public string Name { get; set; }
-        public string Description { get; set; }
-
+        //public string Description { get; set; }
+        public virtual Equipment? Equipment { get; set; }
         public int Id { get; set; }
 
         public Category(string name)
@@ -20,7 +20,7 @@ namespace InventarioMed_Console
         }
         public override string ToString()
         {
-            return $@"Categoria do fabricante: {Name}";
+            return $@"Categoria do equipamento: {Name}";
         }
     }
 }

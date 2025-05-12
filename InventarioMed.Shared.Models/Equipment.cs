@@ -17,9 +17,7 @@ namespace InventarioMed_Console
         public string Manufacturer { get; set; }
         public int Id { get; set; }
 
-        public int Id { get; set; }
-
-        private List<Category> Categories = new();
+        public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
 
         public override string ToString()
         {
@@ -34,7 +32,7 @@ namespace InventarioMed_Console
             Console.WriteLine($"Categorias do equipamento {Name}");
             if (Categories.Count > 0)
             {
-                foreach (Category c in Categories)
+                foreach (var c in Categories)
                 {
                     Console.WriteLine(c);
                 }

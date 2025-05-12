@@ -29,13 +29,13 @@ internal class Program
                     EquipmentRegistration();
                     break;
                 case 2:
-                    //CategoryRegistration();
+                    CategoryRegistration();
                     break;
                 case 3:
                     EquipmentGet();
                     break;
                 case 4:
-                    //CategoryGet();
+                    CategoryGet();
                     break;
                 case -1:
                     Console.WriteLine("Até mais");
@@ -69,41 +69,41 @@ internal class Program
             }
             Console.ReadKey();
         }
-        //void CategoryGet()
-        //{
-        //    Console.Clear();
-        //    Console.WriteLine("Exibir detalhes do equipamento");
-        //    Console.WriteLine("Digite o equipamento cujas categorias deseja consultar");
-        //    string equipmentName = Console.ReadLine();
-        //    if (EquipmentList.ContainsKey(equipmentName))
-        //    {
-        //        Equipment e = EquipmentList[equipmentName];
-        //        e.ShowCategories();
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine($"O equipamento {equipmentName} não existe");
-        //    }
-        //}
-        //void CategoryRegistration()
-        //{
-        //    Console.Clear();
-        //    Console.WriteLine("Registro de categorias");
-        //    Console.WriteLine("Digite o nome do equipamento cuja categoria você deseja registrar");
-        //    string equipmentName = Console.ReadLine();
-        //    if (EquipmentList.ContainsKey(equipmentName))
-        //    {
-        //        Console.WriteLine($"Informe o nome da categoria do {equipmentName}");
-        //        string name = Console.ReadLine();
-        //        Equipment e = EquipmentList[equipmentName];
-        //        e.AddCategory(new Category(name));
-        //        Console.WriteLine($"A categoria {name} do {equipmentName} foi registrada com sucesso");
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine($"O equipamento {equipmentName} não existe");
-        //    }
-        //}
+        void CategoryGet()
+        {
+            Console.Clear();
+            Console.WriteLine("Exibir detalhes do equipamento");
+            Console.WriteLine("Digite o equipamento cujas categorias deseja consultar");
+            string equipmentName = Console.ReadLine();
+            var targetEquip = EquipmentDAL.ReadBy(x => x.Name.Equals(equipmentName));
+            if (targetEquip is not null) targetEquip.ShowCategories();
+            else
+            {
+                Console.WriteLine($"O equipamento {equipmentName} não existe");
+            }
+            Console.ReadKey();
+        }
+        void CategoryRegistration()
+        {
+            Console.Clear();
+            Console.WriteLine("registro de categorias");
+            Console.WriteLine("digite o nome do equipamento cuja categoria você deseja registrar");
+            string equipmentname = Console.ReadLine();
+            var targetEquip = EquipmentDAL.ReadBy(x=>x.Name.Equals(equipmentname));
+            if (targetEquip is not null)
+            {
+                Console.WriteLine($"Informe o nome da categoria do {equipmentname}");
+                string name = Console.ReadLine();
+                targetEquip.AddCategory(new Category(name));
+                EquipmentDAL.Update(targetEquip);
+                Console.WriteLine($"A categoria {name} do {equipmentname} foi registrada com sucesso");
+            }
+            else
+            {
+                Console.WriteLine($"O equipamento {equipmentname} não existe");
+            }
+            Console.ReadKey();
+        }
     }
 
 }

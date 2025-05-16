@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventarioMed_API", "Invent
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventarioMed_Console", "InventarioMed_Console\InventarioMed_Console.csproj", "{37EFC8A9-1FBC-4224-A913-1DE376A08773}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventarioMed.Shared.Models", "InventarioMed.Shared.Models\InventarioMed.Shared.Models.csproj", "{2E5FEB01-97AB-412A-BA51-4B5E424F491F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventarioMed.Shared.Models", "InventarioMed.Shared.Models\InventarioMed.Shared.Models.csproj", "{2E5FEB01-97AB-412A-BA51-4B5E424F491F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventarioMed.Shared.Data", "InventarioMed.Shared.Data\InventarioMed.Shared.Data.csproj", "{8B6D1D7C-EB3B-4EB3-A06D-2DAE39462BD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventarioMed.Shared.Data", "InventarioMed.Shared.Data\InventarioMed.Shared.Data.csproj", "{8B6D1D7C-EB3B-4EB3-A06D-2DAE39462BD2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

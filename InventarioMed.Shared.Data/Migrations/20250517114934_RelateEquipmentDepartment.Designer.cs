@@ -3,6 +3,7 @@ using InventarioMed.Shared.Data.BD;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventarioMed.Shared.Data.Migrations
 {
     [DbContext(typeof(InventarioMedContext))]
-    partial class InventarioMedContextModelSnapshot : ModelSnapshot
+    [Migration("20250517114934_RelateEquipmentDepartment")]
+    partial class RelateEquipmentDepartment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

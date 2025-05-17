@@ -1,4 +1,5 @@
-﻿using InventarioMed_Console;
+﻿using InventarioMed.Shared.Models;
+using InventarioMed_Console;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,6 +14,7 @@ namespace InventarioMed.Shared.Data.BD
     {
         public DbSet<Equipment> Equipment { get; set; }
         public DbSet<Category> Category { get; set; }
+        public DbSet<Department> Department { get; set; }
 
         private string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=InventarioMed_BD_V1;Integrated Security=True;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -20,6 +22,13 @@ namespace InventarioMed.Shared.Data.BD
             optionsBuilder
                 .UseSqlServer(connectionString)
                 .UseLazyLoadingProxies();
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Equipment>()
+                .HasMany(e => e.Departments)
+                .WithMany(d  => d.Equipment);
         }
     }
 }

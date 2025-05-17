@@ -17,6 +17,12 @@ namespace InventarioMed_API.EndPoints
                 return Results.Ok(catResponseList);
             });
 
+            app.MapGet("/Category/{id}", (int id, [FromServices] DAL<Category> dal) =>
+            {
+                var cat = dal.ReadBy(c => c.Id == id);
+                if (cat is null) return Results.NotFound();
+                return Results.Ok(EntityToResponse(cat));
+            });
             app.MapPost("/Category", ([FromServices] DAL<Category> dal, [FromBody] CategoryRequest catRequest) =>
             {
                 dal.Create(new Category(catRequest.name));

@@ -1,4 +1,5 @@
 ﻿using InventarioMed.Shared.Data.BD;
+using InventarioMed.Shared.Models;
 using InventarioMed_API.Requests;
 using InventarioMed_API.Responses;
 using InventarioMed_Console;
@@ -18,9 +19,20 @@ namespace InventarioMed_API.EndPoints
                 return Results.Ok(eqpResponseList);
             });
 
-            app.MapPost("/Equipment", ([FromServices] DAL<Equipment> dal, [FromBody] EquipmentRequest eqp) =>
+            app.MapGet("/Equipment/{id}", (int id, [FromServices] DAL<Equipment> dal) =>
             {
-                dal.Create(new Equipment(eqp.name, eqp.manufacturer));
+                var eqp = dal.ReadBy(e => e.Id == id);
+                if (eqp is null) return Results.NotFound();
+                return Results.Ok(EntityToResponse(eqp));
+            });
+
+            app.MapPost("/Equipment", ([FromServices] DAL<Equipment> dal, [FromServices]DAL<Department> deptdal, [FromBody] EquipmentRequest eqp) =>
+            {
+                dal.Create(
+                    new Equipment(eqp.name, eqp.manufacturer) { Departments = eqp.Departments is not null?
+                    DepartmentRequestConvert(eqp.Departments, deptdal) :
+                    new List<Department>()}
+                );
                 return Results.Created();
             });
 
@@ -42,6 +54,25 @@ namespace InventarioMed_API.EndPoints
                 return Results.Created();
             });
         }
+
+        private static List<Department> DepartmentRequestConvert(ICollection<DepartmentRequest> deptList, DAL<Department> deptdal)
+        {
+            var departmentList = new List<Department>();
+            foreach (var item in deptList)
+            {
+                var dept = RequestToEntity(item);
+                var deptBuscado = deptdal.ReadBy(d => d.Name.ToUpper().Equals(dept.Name.ToUpper()));
+                if (deptBuscado is not null) departmentList.Add(deptBuscado);
+                else departmentList.Add(dept);
+            }
+            return departmentList;
+        }
+
+        private static Department RequestToEntity(DepartmentRequest dept)
+        {
+            return new Department() {Name = dept.Name};
+        }
+
         private static ICollection<EquipmentResponse> EntityListToResponseList (IEnumerable<Equipment> eqpList)
         {
             return eqpList.Select(a => EntityToResponse(a)).ToList();

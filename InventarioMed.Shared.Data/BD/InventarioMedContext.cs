@@ -1,5 +1,7 @@
-﻿using InventarioMed.Shared.Models;
+﻿using InventarioMed.Shared.Data.Models;
+using InventarioMed.Shared.Models;
 using InventarioMed_Console;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace InventarioMed.Shared.Data.BD
 {
-    public class InventarioMedContext : DbContext
+    public class InventarioMedContext : IdentityDbContext<AccessUser,AccessRole,int>
     {
         public DbSet<Equipment> Equipment { get; set; }
         public DbSet<Category> Category { get; set; }
@@ -26,6 +28,7 @@ namespace InventarioMed.Shared.Data.BD
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Equipment>()
                 .HasMany(e => e.Departments)
                 .WithMany(d  => d.Equipment);

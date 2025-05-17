@@ -11,7 +11,11 @@ namespace InventarioMed_API.EndPoints
     {
         public static void AddEndPointsEquipment(this WebApplication app)
         {
-            app.MapGet("/Equipment", ([FromServices] DAL<Equipment> dal) =>
+            var groupBuilder = app.MapGroup("equipment")
+                .RequireAuthorization()
+                .WithTags("Equipamentos");
+
+            groupBuilder.MapGet("", ([FromServices] DAL<Equipment> dal) =>
             {
                 var eqpList = dal.Read();
                 if (eqpList == null) return Results.NotFound();
@@ -19,14 +23,14 @@ namespace InventarioMed_API.EndPoints
                 return Results.Ok(eqpResponseList);
             });
 
-            app.MapGet("/Equipment/{id}", (int id, [FromServices] DAL<Equipment> dal) =>
+            groupBuilder.MapGet("/{id}", (int id, [FromServices] DAL<Equipment> dal) =>
             {
                 var eqp = dal.ReadBy(e => e.Id == id);
                 if (eqp is null) return Results.NotFound();
                 return Results.Ok(EntityToResponse(eqp));
             });
 
-            app.MapPost("/Equipment", ([FromServices] DAL<Equipment> dal, [FromServices]DAL<Department> deptdal, [FromBody] EquipmentRequest eqp) =>
+            groupBuilder.MapPost("", ([FromServices] DAL<Equipment> dal, [FromServices]DAL<Department> deptdal, [FromBody] EquipmentRequest eqp) =>
             {
                 dal.Create(
                     new Equipment(eqp.name, eqp.manufacturer) { Departments = eqp.Departments is not null?
@@ -36,7 +40,7 @@ namespace InventarioMed_API.EndPoints
                 return Results.Created();
             });
 
-            app.MapDelete("/Equipment/{id}", ([FromServices] DAL<Equipment> dal, int id) =>
+            groupBuilder.MapDelete("/{id}", ([FromServices] DAL<Equipment> dal, int id) =>
             {
                 var eqp = dal.ReadBy(e => e.Id == id);
                 if (eqp is null) return Results.NotFound();
@@ -44,7 +48,7 @@ namespace InventarioMed_API.EndPoints
                 return Results.NoContent();
             });
 
-            app.MapPut("/Equipment", ([FromServices] DAL<Equipment> dal, [FromBody] EquipmentEditRequest eqp) =>
+            groupBuilder.MapPut("", ([FromServices] DAL<Equipment> dal, [FromBody] EquipmentEditRequest eqp) =>
             {
                 var eqpToEdit = dal.ReadBy(e => e.Id == eqp.id);
                 if (eqpToEdit is null) return Results.NotFound();

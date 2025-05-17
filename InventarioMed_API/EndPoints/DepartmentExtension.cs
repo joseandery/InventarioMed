@@ -11,7 +11,11 @@ namespace InventarioMed_API.EndPoints
     {
         public static void AddEndPointsDepartment(this WebApplication app)
         {
-            app.MapGet("/Department", ([FromServices] DAL<Department> dal) =>
+            var groupBuilder = app.MapGroup("department")
+                .RequireAuthorization()
+                .WithTags("Departments");
+
+            groupBuilder.MapGet("", ([FromServices] DAL<Department> dal) =>
             {
                 var deptList = dal.Read();
                 if (deptList == null) return Results.NotFound();
@@ -19,13 +23,13 @@ namespace InventarioMed_API.EndPoints
                 return Results.Ok(deptResponseList);
             });
 
-            app.MapPost("/Department", ([FromServices] DAL<Department> dal, [FromBody] DepartmentRequest dept) =>
+            groupBuilder.MapPost("", ([FromServices] DAL<Department> dal, [FromBody] DepartmentRequest dept) =>
             {
                 dal.Create(RequestToEntity(dept));
                 return Results.Created();
             });
 
-            app.MapDelete("/Department/{id}", ([FromServices] DAL<Department> dal, int id) =>
+            groupBuilder.MapDelete("/{id}", ([FromServices] DAL<Department> dal, int id) =>
             {
                 var dept = dal.ReadBy(e => e.Id == id);
                 if (dept is null) return Results.NotFound();

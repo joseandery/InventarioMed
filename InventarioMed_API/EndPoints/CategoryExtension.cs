@@ -1,4 +1,5 @@
 ﻿using InventarioMed.Shared.Data.BD;
+using InventarioMed_API.Requests;
 using InventarioMed_API.Responses;
 using InventarioMed_Console;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +17,12 @@ namespace InventarioMed_API.EndPoints
                 return Results.Ok(catResponseList);
             });
 
-            app.MapPost("/Category", ([FromServices] DAL<Category> dal, [FromBody] Category cat) =>
+            app.MapPost("/Category", ([FromServices] DAL<Category> dal, [FromBody] CategoryRequest catRequest) =>
             {
-                dal.Create(cat);
-                return Results.Created();
+                dal.Create(new Category(catRequest.name));
+                return Results.Ok();
             });
+
 
             app.MapDelete("/Category/{id}", ([FromServices] DAL<Category> dal, int id) =>
             {
@@ -30,28 +32,29 @@ namespace InventarioMed_API.EndPoints
                 return Results.NoContent();
             });
 
-            app.MapPut("/Category", ([FromServices] DAL<Category> dal, [FromBody] Category cat) =>
+            app.MapPut("/Category", ([FromServices] DAL<Category> dal, [FromBody] CategoryEditRequest catRequest) =>
             {
-                var catToEdit = dal.ReadBy(c => c.Id == cat.Id);
+                var catToEdit = dal.ReadBy(a => a.Id == catRequest.id);
                 if (catToEdit is null) return Results.NotFound();
-                catToEdit.Name = cat.Name;
+                catToEdit.Name = catRequest.name;
                 dal.Update(catToEdit);
                 return Results.Created();
             });
 
+
         }
 
-        private static ICollection<CategoryResponse> EntityListToResponseList(IEnumerable<Category> entities)
+        private static ICollection<CategoryResponse> EntityListToResponseList(IEnumerable<Category> catList)
         {
-            return entities.Select(a => EntityToResponse(a)).ToList();
+            return catList.Select(a => EntityToResponse(a)).ToList();
         }
-        private static CategoryResponse EntityToResponse(Category entity)
+        private static CategoryResponse EntityToResponse(Category cat)
         {
             return new CategoryResponse(
-                entity.Id, 
-                entity.Name, 
-                entity.Equipment?.Id?? 0,
-                entity.Equipment?.Name?? "No equipment");
+                cat.Id, 
+                cat.Name, 
+                cat.Equipment?.Id?? 0,
+                cat.Equipment?.Name?? "No equipment");
         }
     }
 }

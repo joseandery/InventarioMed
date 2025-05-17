@@ -42,13 +42,13 @@ namespace InventarioMed_API.EndPoints
                 return Results.Created();
             });
         }
-        private static ICollection<EquipmentResponse> EntityListToResponseList (IEnumerable<Equipment> entities)
+        private static ICollection<EquipmentResponse> EntityListToResponseList (IEnumerable<Equipment> eqpList)
         {
-            return entities.Select(a => EntityToResponse(a)).ToList();
+            return eqpList.Select(a => EntityToResponse(a)).ToList();
         }
-        private static EquipmentResponse EntityToResponse (Equipment entity)
+        private static EquipmentResponse EntityToResponse (Equipment eqp)
         {
-            return new EquipmentResponse(entity.Id, entity.Name, entity.Manufacturer);
+            return new EquipmentResponse(eqp.Id, eqp.Name, eqp.Manufacturer);
         }
     }
 }

@@ -1,6 +1,5 @@
 using InventarioMed.Shared.Data.BD;
 using InventarioMed.Shared.Models;
-using InventarioMed_API.EndPoints;
 using InventarioMed_Console;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
